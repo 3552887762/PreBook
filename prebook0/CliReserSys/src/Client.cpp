@@ -1,4 +1,4 @@
-#include "client.h"
+#include "../include/Client.hpp"
 
 enum OP_TYPE
 {
@@ -283,6 +283,7 @@ void Client::Show_user_yd()
 
     Json::Value resval;
     Json::Reader Read;
+    cout << buff << endl; // 测试
     if (!Read.parse(buff, resval))
     {
         cout << "json解析失败" << endl;
@@ -402,15 +403,15 @@ void Client::Run()
     }
 }
 
-int main()
-{
-    Client cli;
-    if (!cli.Connect())
-    {
-        cout << "连接失败" << endl;
-    }
+// int main()
+// {
+//     Client cli;
+//     if (!cli.Connect())
+//     {
+//         cout << "连接失败" << endl;
+//     }
 
-    cli.Run();
+//     cli.Run();
 
-    exit(0);
-}
+//     exit(0);
+// }

@@ -1,0 +1,1 @@
+g++ -std=c++0x Client.cpp Main.cpp -L/usr/lib/x86_64-linux-gnu -ljsoncpp -o CliMain

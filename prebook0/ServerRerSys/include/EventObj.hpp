@@ -1,15 +1,18 @@
+
+#ifndef EVENTOBJ_HPP
+#define EVENTOBJ_HPP
 #include <iostream>
 #include <string>
-#include <string.h>
 #include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <event.h>
-#include <mysql/mysql.h>
 #include <jsoncpp/json/json.h>
-
 using namespace std;
+
+class MyLibevent;
+
 enum OP_TYPE
 {
     DL = 1,
@@ -20,9 +23,6 @@ enum OP_TYPE
     QXYD,
     TC
 };
-// 监听队列大小
-const int lis_max = 20;
-class MyLibevent;
 class Socket
 {
 public:
@@ -65,42 +65,6 @@ public:
     MyLibevent *plib;
 };
 
-class MysqlClient
-{
-
-public:
-    MysqlClient()
-    {
-        ips = "127.0.0.1";
-        mysql_username = "root";
-        mysql_userpasswd = "111111";
-        mysql_dbname = "c2301db";
-        port = 3306;
-    }
-    bool Connect_toDb();
-    bool Dd_user_zc(string name, string tel,string pw);
-    bool Dd_user_dl(string &name, string tel,string pw);
-    bool Db_show_yuyue(Json::Value &resval);
-    bool Db_user_yd(string tel,string tk_id);
-    bool Db_show_yd(Json::Value &resval,string tel);
-    bool Db_Delete_yd(string res_id);
-
-    void Begin();
-    void RollBack();
-    void Commit();
-    ~MysqlClient()
-    {
-        mysql_close(&mysql_con);
-    }
-
-private:
-    MYSQL mysql_con;
-    string ips;
-    string mysql_username;
-    string mysql_userpasswd;
-    string mysql_dbname;
-    short port;
-};
 
 // 处理监听套接字
 class Accept_Obj : public Sock_Obj
@@ -148,35 +112,4 @@ private:
     Json::Value m_val;
 };
 
-class MyLibevent
-{
-public:
-    MyLibevent()
-    {
-        m_base = NULL;
-    }
-
-    bool MyLibevent_Init()
-    {
-        m_base = event_init();
-        if (m_base == NULL)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
-    bool MyLibevent_Add(int fd, Sock_Obj *pObj); // sockfd监听套接字 accept ->obj, c 连接套接字 recv
-    void MyLibevent_Delete(Sock_Obj *pObj);
-    void MyLibevent_Loop()
-    {
-        if (m_base != NULL)
-        {
-            event_base_dispatch(m_base);
-        }
-    }
-
-private:
-    struct event_base *m_base;
-};
+#endif
