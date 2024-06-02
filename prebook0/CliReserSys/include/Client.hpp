@@ -34,14 +34,14 @@ public:
     {
         close(sockfd);
     }
-    bool Connect();
+    bool ConnectToServer();
 
     void Run();
 
 private:
     void Show_Menu();
-    void User_zc();
-    void User_dl();
+    void User_Register();
+    void User_Login();
     void Show_YuYue();
     void User_yd();
     void Show_user_yd();

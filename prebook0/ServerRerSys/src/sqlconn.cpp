@@ -28,6 +28,7 @@ bool MysqlClient::Dd_user_zc(string name, string tel, string pw)
         
         return false;
     }
+            cout<<"show user zc success!"<<endl;
     return true;
 }
 bool MysqlClient::Dd_user_dl(string &name, string tel, string pw)
@@ -58,6 +59,7 @@ bool MysqlClient::Dd_user_dl(string &name, string tel, string pw)
     {
         return false;
     }
+        cout<<"show user dl success!"<<endl;
     return true;
 }
 
@@ -96,6 +98,7 @@ bool MysqlClient::Db_show_yuyue(Json::Value &resval)
 
         resval["arr"].append(tmp);
     }
+    cout<<"show yuyue success!"<<endl;
     return true;
 }
 void MysqlClient::Begin()
@@ -169,6 +172,7 @@ bool MysqlClient::Db_user_yd(string tel, string tk_id)
     }
 
     Commit();
+                cout<<"show user yd success!"<<endl;
     return true;
 }
 bool MysqlClient::Db_show_yd(Json::Value &resval, string tel)
@@ -204,6 +208,7 @@ bool MysqlClient::Db_show_yd(Json::Value &resval, string tel)
 
         resval["arr"].append(tmp);
     }
+                cout<<"show user yd success!"<<endl;
     return true;
 }
 bool MysqlClient::Db_Delete_yd(string res_id)
@@ -279,5 +284,6 @@ bool MysqlClient::Db_Delete_yd(string res_id)
     }
 
     Commit();
+                cout<<"user delete  success!"<<endl;
     return true;
 }

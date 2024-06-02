@@ -47,7 +47,7 @@ int main()
 {
     Client cli;
     clog << "client main" << endl;
-    if (!cli.Connect())
+    if (!cli.ConnectToServer())
     {
         exit(1);
     }

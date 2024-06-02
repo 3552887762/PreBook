@@ -12,7 +12,7 @@ enum OP_TYPE
 };
 
 const string ST_OK = "OK";
-bool Client::Connect()
+bool Client::ConnectToServer()
 {
     sockfd = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd == -1)
@@ -34,6 +34,43 @@ bool Client::Connect()
 
     return true;
 }
+
+void Client::Run()
+{
+    while (runing)
+    {
+        Show_Menu();
+        switch (User_Op)
+        {
+        case DL:
+            User_Login();
+            break;
+        case ZC:
+            User_Register();
+            break;
+        case CKYY:
+            Show_YuYue();
+            break;
+        case YD:
+            User_yd();
+            break;
+        case YDXX:
+            Show_user_yd();
+            break;
+        case QXYD:
+            Delete_user_yd();
+            break;
+        case TC:
+            runing = false;
+            break;
+
+        default:
+            cout << "无效输入" << endl;
+            break;
+        }
+    }
+}
+
 void Client::Show_Menu()
 {
     if (!dl_status)
@@ -64,7 +101,7 @@ void Client::Send_Json(const Json::Value &val)
 {
     send(sockfd, val.toStyledString().c_str(), strlen(val.toStyledString().c_str()), 0);
 }
-void Client::User_zc()
+void Client::User_Register()
 {
     cout << "请输入手机号" << endl;
     cin >> user_tel;
@@ -121,7 +158,7 @@ void Client::User_zc()
     cout << "注册成功" << endl;
     dl_status = true;
 }
-void Client::User_dl()
+void Client::User_Login()
 {
     cout << "请输入手机号" << endl;
     cin >> user_tel;
@@ -366,39 +403,4 @@ void Client::Delete_user_yd()
 
     cout<<"取消成功"<<endl;
     return ;
-}
-void Client::Run()
-{
-    while (runing)
-    {
-        Show_Menu();
-        switch (User_Op)
-        {
-        case DL:
-            User_dl();
-            break;
-        case ZC:
-            User_zc();
-            break;
-        case CKYY:
-            Show_YuYue();
-            break;
-        case YD:
-            User_yd();
-            break;
-        case YDXX:
-            Show_user_yd();
-            break;
-        case QXYD:
-            Delete_user_yd();
-            break;
-        case TC:
-            runing = false;
-            break;
-
-        default:
-            cout << "无效输入" << endl;
-            break;
-        }
-    }
 }
