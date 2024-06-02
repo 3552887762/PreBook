@@ -402,16 +402,3 @@ void Client::Run()
         }
     }
 }
-
-// int main()
-// {
-//     Client cli;
-//     if (!cli.Connect())
-//     {
-//         cout << "连接失败" << endl;
-//     }
-
-//     cli.Run();
-
-//     exit(0);
-// }
