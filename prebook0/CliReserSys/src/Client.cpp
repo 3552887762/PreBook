@@ -1,15 +1,6 @@
 #include "../include/Client.hpp"
 #include <jsoncpp/json/value.h>
-enum OP_TYPE
-{
-    DL = 1,
-    ZC,
-    CKYY,
-    YD,
-    YDXX,
-    QXYD,
-    TC
-};
+
 
 const string ST_OK = "OK";
 bool Client::ConnectToServer()
@@ -49,16 +40,16 @@ void Client::Run()
             User_Register();
             break;
         case CKYY:
-            Show_YuYue();
+             User_Check_PreBook();
             break;
         case YD:
-            User_yd();
+            User_Predet();
             break;
         case YDXX:
-            Show_user_yd();
+            User_Check_Predet();
             break;
         case QXYD:
-            Delete_user_yd();
+            User_Cancel_Predet();
             break;
         case TC:
             runing = false;
@@ -95,6 +86,7 @@ void Client::Show_Menu()
         cin >> User_Op;
         User_Op += 2;
     }
+    cout << "请输入选择：" << endl;
 }
 
 void Client::Send_Json(const Json::Value &val)
@@ -166,7 +158,7 @@ void Client::User_Login()
     val["user_password"] = password;
     Send_Json(val);
 
-        string s = recv_data();
+    string s = recv_data();
     
     Json::Value resval;
     Json::Reader Read;
@@ -181,14 +173,13 @@ void Client::User_Login()
         return;
     }
 
-    cout << "登陆成功" << endl;
+
     dl_status = true;
     user_name = resval["user_name"].asString();
-
-    return;
+    cout << "登陆成功" << endl;
 }
 
-void Client::Show_YuYue()
+void Client:: User_Check_PreBook()
 {
     Json::Value val;
     val["type"] = CKYY;
@@ -211,9 +202,6 @@ void Client::Show_YuYue()
         return;
     }
 
-    // 打印预约信息
-    // cout << buff << endl; // 测试
-
     int num = resval["num"].asInt();
     if (num == 0)
     {
@@ -225,7 +213,6 @@ void Client::Show_YuYue()
     cout << "|序号| 地点名称 | 总票数 | 已预定 | 时间  |" << endl;
     for (int i = 0; i < num; i++)
     {
-        // m_map.insert(make_pair(i,resval["arr"]["tk_id"].asString()));
         m_map.insert({i + 1, resval["arr"][i]["tk_id"].asString()});
         cout << i + 1 << "   ";
         cout << resval["arr"][i]["tk_name"].asString() << "   ";
@@ -235,9 +222,9 @@ void Client::Show_YuYue()
     }
 }
 
-void Client::User_yd()
+void Client::User_Predet()
 {
-    Show_YuYue(); // m_map 有了序号和tk_id的对应关系
+     User_Check_PreBook(); // m_map 有了序号和tk_id的对应关系
     cout << "请输入你要预定的序号:" << endl;
     int index = -1;
     cin >> index;
@@ -249,20 +236,16 @@ void Client::User_yd()
         return;
     }
 
-    string tk_id = pos->second;
-
     Json::Value val;
     val["type"] = YD;
     val["user_tel"] = user_tel;
-    val["tk_id"] = tk_id;
+    val["tk_id"] = pos->second;
 
     Send_Json(val);
 
-        string s = recv_data();
-    
+    string s = recv_data();
     Json::Value resval;
     Json::Reader Read;
-   
     if (!Read.parse(s, resval)){
         cout << "json解析失败" << endl;
         return;
@@ -301,7 +284,7 @@ string Client::recv_data()
     return s;
 }
 
-void Client::Show_user_yd()
+void Client::User_Check_Predet()
 {
     Json::Value val;
     val["type"] = YDXX;
@@ -342,9 +325,9 @@ void Client::Show_user_yd()
     }
 }
 
-void Client::Delete_user_yd()
+void Client::User_Cancel_Predet()
 {
-    Show_user_yd();
+    User_Check_Predet();
     cout<<"请输入要取消的序号："<<endl;
     int index = 0;
     cin>>index;
@@ -356,11 +339,9 @@ void Client::Delete_user_yd()
         return;
     }
 
-    string res_id = pos->second;
-
     Json::Value val;
     val["type"] = QXYD;
-    val["res_id"] = res_id;
+    val["res_id"] = pos->second;
 
     Send_Json(val);
 

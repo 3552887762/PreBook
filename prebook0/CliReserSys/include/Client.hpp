@@ -1,3 +1,6 @@
+#ifndef CLIENT_HPP
+#define CLIENT_HPP
+
 #include <iostream>
 #include <string>
 #include <string.h>
@@ -8,6 +11,16 @@
 #include <jsoncpp/json/json.h>
 
 using namespace std;
+enum OP_TYPE
+{
+    DL = 1,
+    ZC,
+    CKYY,
+    YD,
+    YDXX,
+    QXYD,
+    TC
+};
 class Client
 {
 public:
@@ -42,10 +55,10 @@ private:
     void Show_Menu();
     void User_Register();
     void User_Login();
-    void Show_YuYue();
-    void User_yd();
-    void Show_user_yd();
-    void Delete_user_yd();
+    void  User_Check_PreBook();
+    void User_Predet();
+    void User_Check_Predet();
+    void User_Cancel_Predet();
     string recv_data();
     void Send_Json(const Json::Value &val);
 
@@ -65,3 +78,5 @@ private:
     map<int,string> m_map_yd;
 
 };
+
+#endif

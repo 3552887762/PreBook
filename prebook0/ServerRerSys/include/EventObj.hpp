@@ -57,7 +57,7 @@ private:
 };
 
 //
-class Sock_Obj
+class Event_Obj
 {
 public:
     virtual void CallBack_Fun() = 0;
@@ -67,10 +67,10 @@ public:
 
 
 // 处理监听套接字
-class Accept_Obj : public Sock_Obj
+class Event_Accept : public Event_Obj
 {
 public:
-    Accept_Obj(int fd, MyLibevent *p)
+    Event_Accept(int fd, MyLibevent *p)
     {
         sockfd = fd;
         plib = p;
@@ -80,16 +80,17 @@ public:
 private:
     int sockfd;
 };
+
 // 处理连接套接字
-class Recv_Obj : public Sock_Obj
+class Event_Recv : public Event_Obj
 {
 public:
-    Recv_Obj(int fd, MyLibevent *p) : c(fd)
+    Event_Recv(int fd, MyLibevent *p) : c(fd)
     {
         plib = p;
     }
     virtual void CallBack_Fun();
-    ~Recv_Obj()
+    ~Event_Recv()
     {
         close(c);
         cout << "client close" << endl;
@@ -98,7 +99,7 @@ public:
 private:
     void Send_OK();
     void Send_ERR();
-    void Send_Json(Json::Value &val);
+    void Send_Json(Json::Value &val) const;
 
     void User_zc();
     void User_dl();

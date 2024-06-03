@@ -2,7 +2,7 @@
 #include "../include/EventObj.hpp"
 #include "cstring"
 void G_CALLBACK_FUN(int fd, short ev, void *arg) {
-  Sock_Obj *ptr = (Sock_Obj *)arg;
+  Event_Obj *ptr = (Event_Obj *)arg;
   if (ptr == NULL) {
     return;
   }
@@ -12,7 +12,7 @@ void G_CALLBACK_FUN(int fd, short ev, void *arg) {
     ptr->CallBack_Fun(); //
   }
 }
-bool MyLibevent::MyLibevent_Add(int fd, Sock_Obj *pObj) {
+bool MyLibevent::MyLibevent_Add(int fd, Event_Obj *pObj) {
   if (pObj == NULL) {
     return false;
   }
@@ -25,7 +25,7 @@ bool MyLibevent::MyLibevent_Add(int fd, Sock_Obj *pObj) {
   event_add(pev, NULL);
   return true;
 }
-void MyLibevent::MyLibevent_Delete(Sock_Obj *pObj) {
+void MyLibevent::MyLibevent_Delete(Event_Obj *pObj) {
   if (pObj != NULL) {
     event_free(pObj->ev);
   }

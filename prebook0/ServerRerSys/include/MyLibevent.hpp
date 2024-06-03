@@ -6,7 +6,7 @@
 #include<event.h>
 
 
-class Sock_Obj;
+class Event_Obj;
 
 class MyLibevent
 {
@@ -26,8 +26,8 @@ public:
         return true;
     }
 
-    bool MyLibevent_Add(int fd, Sock_Obj *pObj); // sockfd监听套接字 accept ->obj, c 连接套接字 recv
-    void MyLibevent_Delete(Sock_Obj *pObj);
+    bool MyLibevent_Add(int fd, Event_Obj *pObj); // sockfd监听套接字 accept ->obj, c 连接套接字 recv
+    void MyLibevent_Delete(Event_Obj *pObj);
     bool MyLibevent_Dispatch();
 
 
