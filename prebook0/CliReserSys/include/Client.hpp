@@ -46,7 +46,7 @@ private:
     void User_yd();
     void Show_user_yd();
     void Delete_user_yd();
-
+    string recv_data();
     void Send_Json(const Json::Value &val);
 
 private:

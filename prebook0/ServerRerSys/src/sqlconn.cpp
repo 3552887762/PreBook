@@ -209,6 +209,7 @@ bool MysqlClient::Db_show_yd(Json::Value &resval, string tel)
         resval["arr"].append(tmp);
     }
                 cout<<"show user yd success!"<<endl;
+                 LOG_TRACE << "999";
     return true;
 }
 bool MysqlClient::Db_Delete_yd(string res_id)

@@ -1,5 +1,5 @@
 #include "../include/Client.hpp"
-
+#include <jsoncpp/json/value.h>
 enum OP_TYPE
 {
     DL = 1,
@@ -134,19 +134,13 @@ void Client::User_Register()
 
     Send_Json(val);
 
-    char buff[128] = {0};
-    int n = recv(sockfd, buff, 127, 0);
-    if (n <= 0)
-    {
-        cout << "ser close" << endl;
-        return;
-    }
-
+        string s = recv_data();
+    
     Json::Value resval;
     Json::Reader Read;
-    if (!Read.parse(buff, resval))
-    {
-        cout << "json 格式解析错误" << endl;
+   
+    if (!Read.parse(s, resval)){
+        cout << "json解析失败" << endl;
         return;
     }
 
@@ -172,22 +166,15 @@ void Client::User_Login()
     val["user_password"] = password;
     Send_Json(val);
 
-    char buff[128] = {0};
-    int n = recv(sockfd, buff, 127, 0);
-    if (n <= 0)
-    {
-        cout << "ser close" << endl;
-        return;
-    }
-
+        string s = recv_data();
+    
     Json::Value resval;
     Json::Reader Read;
-    if (!Read.parse(buff, resval))
-    {
-        cout << "json解析出错" << endl;
+   
+    if (!Read.parse(s, resval)){
+        cout << "json解析失败" << endl;
         return;
     }
-
     if (resval["status"].asString().compare(ST_OK) != 0)
     {
         cout << "登陆失败" << endl;
@@ -207,18 +194,12 @@ void Client::Show_YuYue()
     val["type"] = CKYY;
     Send_Json(val);
 
-    char buff[1024] = {0};
-    int n = recv(sockfd, buff, 1023, 0);
-    if (n <= 0)
-    {
-        cout << "ser close" << endl;
-        return;
-    }
-
+        string s = recv_data();
+    
     Json::Value resval;
     Json::Reader Read;
-    if (!Read.parse(buff, resval))
-    {
+   
+    if (!Read.parse(s, resval)){
         cout << "json解析失败" << endl;
         return;
     }
@@ -277,19 +258,13 @@ void Client::User_yd()
 
     Send_Json(val);
 
-    char buff[128] = {0};
-    int n = recv(sockfd, buff, 127, 0);
-    if (n <= 0)
-    {
-        cout << "ser close" << endl;
-        return;
-    }
-
+        string s = recv_data();
+    
     Json::Value resval;
     Json::Reader Read;
-    if (!Read.parse(buff, resval))
-    {
-        cout << "json无法解析" << endl;
+   
+    if (!Read.parse(s, resval)){
+        cout << "json解析失败" << endl;
         return;
     }
 
@@ -303,39 +278,50 @@ void Client::User_yd()
     cout << "预定成功" << endl;
     return;
 }
+
+string Client::recv_data()
+{
+    const int SIZE = 1024;
+    string s;
+    int total_bytes_received = 0;
+    int bytes_received = 0;
+    do 
+    {
+        char buff[SIZE] = {0};
+        bytes_received = recv(sockfd, buff, SIZE, 0);
+        if (bytes_received <= 0)
+        {
+            cout<<"Error or connection closed by peer"<<endl;
+            break;
+        }
+        s.append(buff, bytes_received);
+        total_bytes_received += bytes_received;
+    }
+    while (bytes_received == SIZE);
+    return s;
+}
+
 void Client::Show_user_yd()
 {
     Json::Value val;
     val["type"] = YDXX;
     val["user_tel"] = user_tel;
     Send_Json(val);
-
-    char buff[1024] = {0};
-    int n = recv(sockfd, buff, 1023, 0);
-    if (n <= 0)
-    {
-        cout << "ser close" << endl;
-        return;
-    }
-
+    string s = recv_data();
+    
     Json::Value resval;
     Json::Reader Read;
-    cout << buff << endl; // 测试
-    if (!Read.parse(buff, resval))
-    {
+   
+    if (!Read.parse(s, resval)){
         cout << "json解析失败" << endl;
         return;
     }
-
     string status = resval["status"].asString();
     if (status.compare(ST_OK) != 0)
     {
         cout << "查看我的预定信息失败" << endl;
         return;
     }
-
-    // 打印预约信息
-    // cout << buff << endl; // 测试
 
     int num = resval["num"].asInt();
     if (num == 0)
@@ -378,22 +364,15 @@ void Client::Delete_user_yd()
 
     Send_Json(val);
 
-    char buff[128] = {0};
-    int n = recv(sockfd,buff,127,0);
-    if ( n <= 0 )
-    {
-        cout<<"ser close"<<endl;
-        return;
-    }
-
+    string s = recv_data();
+    
     Json::Value resval;
     Json::Reader Read;
-    if ( !Read.parse(buff,resval))
-    {
-        cout<<"josn 解析失败"<<endl;
+   
+    if (!Read.parse(s, resval)){
+        cout << "json解析失败" << endl;
         return;
     }
-
     string status_str = resval["status"].asString();
     if ( status_str.compare(ST_OK) != 0 )
     {

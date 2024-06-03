@@ -161,14 +161,12 @@ void Recv_Obj::Show_user_yd()
 {
     Json::Value resval;
     string user_tel = m_val["user_tel"].asString();
-
     MysqlClient cli;
     if (!cli.Connect_toDb())
     {
         Send_ERR();
         return;
     }
-
     if (!cli.Db_show_yd(resval, user_tel))
     {
         Send_ERR();
