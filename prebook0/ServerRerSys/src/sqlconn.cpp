@@ -13,7 +13,7 @@ bool MysqlClient::Connect_toDb()
     mysql = mysql_real_connect(mysql, ips.c_str(), mysql_username.c_str(), mysql_userpasswd.c_str(), mysql_dbname.c_str(), port, NULL, 0);
     if (mysql == NULL)
     {
-        cout << "连接数据库失败" << endl;
+        LOG_TRACE << "连接数据库失败" ;
         return false;
     }
 
@@ -28,7 +28,7 @@ bool MysqlClient::Dd_user_zc(string name, string tel, string pw)
         
         return false;
     }
-            cout<<"show user zc success!"<<endl;
+            LOG_TRACE<<"show user zc success!";
     return true;
 }
 bool MysqlClient::Dd_user_dl(string &name, string tel, string pw)
@@ -59,7 +59,7 @@ bool MysqlClient::Dd_user_dl(string &name, string tel, string pw)
     {
         return false;
     }
-        cout<<"show user dl success!"<<endl;
+        LOG_TRACE<<"show user dl success!";
     return true;
 }
 
@@ -98,28 +98,28 @@ bool MysqlClient::Db_show_yuyue(Json::Value &resval)
 
         resval["arr"].append(tmp);
     }
-    cout<<"show yuyue success!"<<endl;
+    LOG_TRACE<<"show yuyue success!";
     return true;
 }
 void MysqlClient::Begin()
 {
     if (mysql_query(&mysql_con, "begin") != 0)
     {
-        cout << "开始事务失败" << endl;
+        LOG_TRACE << "开始事务失败" ;
     }
 }
 void MysqlClient::RollBack()
 {
     if (mysql_query(&mysql_con, "rollback") != 0)
     {
-        cout << "回滚失败" << endl;
+        LOG_TRACE << "回滚失败" ;
     }
 }
 void MysqlClient::Commit()
 {
     if (mysql_query(&mysql_con, "commit") != 0)
     {
-        cout << "提交事务失败" << endl;
+        LOG_TRACE << "提交事务失败" ;
     }
 }
 bool MysqlClient::Db_user_yd(string tel, string tk_id)
@@ -172,7 +172,7 @@ bool MysqlClient::Db_user_yd(string tel, string tk_id)
     }
 
     Commit();
-                cout<<"show user yd success!"<<endl;
+                LOG_TRACE<<"show user yd success!";
     return true;
 }
 bool MysqlClient::Db_show_yd(Json::Value &resval, string tel)
@@ -208,8 +208,7 @@ bool MysqlClient::Db_show_yd(Json::Value &resval, string tel)
 
         resval["arr"].append(tmp);
     }
-                cout<<"show user yd success!"<<endl;
-                 LOG_TRACE << "999";
+                LOG_TRACE<<"show user yd success!";
     return true;
 }
 bool MysqlClient::Db_Delete_yd(string res_id)
@@ -218,7 +217,7 @@ bool MysqlClient::Db_Delete_yd(string res_id)
     string sql_tkid = string("select tk_id from ticket_res where res_id=")+res_id;
     if ( mysql_query(&mysql_con,sql_tkid.c_str()) != 0 )
     {
-        cout<<"查询tk_id失败"<<endl;
+        LOG_TRACE<<"查询tk_id失败";
         return false;
     }
 
@@ -285,6 +284,6 @@ bool MysqlClient::Db_Delete_yd(string res_id)
     }
 
     Commit();
-                cout<<"user delete  success!"<<endl;
+                LOG_TRACE<<"user delete  success!";
     return true;
 }

@@ -49,7 +49,7 @@ void Accept_Obj::CallBack_Fun()
     }
 
     plib->MyLibevent_Add(c, precv);
-    cout << "accept client:" << c << endl;
+    LOG_TRACE << "accept client:" << c ;
 }
 void Recv_Obj::Send_OK()
 {
@@ -208,13 +208,12 @@ void Recv_Obj::CallBack_Fun()
         return;
     }
 
-    cout << "recv:" << buff << endl;
     m_val.clear();
 
     Json::Reader Read;
     if (!Read.parse(buff, m_val))
     {
-        cout << "json 解析失败" << endl;
+        LOG_TRACE << "json 解析失败" ;
         Send_ERR();
         return;
     }
