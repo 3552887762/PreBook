@@ -22,7 +22,8 @@ bool Client::ConnectToServer()
         cout << "Connect err" << endl;
         return false;
     }
-
+        std::this_thread::sleep_for(std::chrono::seconds(1)); // 模拟耗时操作  
+        std::cout << "Client connected to server" << std::endl;  
     return true;
 }
 
@@ -363,4 +364,35 @@ void Client::User_Cancel_Predet()
 
     cout<<"取消成功"<<endl;
     return ;
+}
+
+void Client::User_Register(const std::string &tel, const std::string &name,
+                           const std::string &passwd) {
+  Json::Value val;
+  val["type"] = ZC;
+  val["user_tel"] = tel;
+  val["user_name"] = name;
+  val["user_passwd"] = passwd;
+
+  send(sockfd, val.toStyledString().c_str(),
+       strlen(val.toStyledString().c_str()), 0);
+
+string s = recv_data();
+    
+    val.clear();
+    Json::Reader Read;
+   
+    if (!Read.parse(s, val)){
+        cout << "json解析失败" << endl;
+        return;
+    }
+
+  string status_str = val["status"].asString();
+  if (status_str.compare("OK") != 0) {
+    cout << "注册失败" << endl;
+    return;
+  }
+
+  dl_status = true;
+  cout << "注册成功" << endl;
 }

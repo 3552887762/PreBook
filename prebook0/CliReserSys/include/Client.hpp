@@ -9,7 +9,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <jsoncpp/json/json.h>
-
+#include <thread>  
 using namespace std;
 enum OP_TYPE
 {
@@ -50,10 +50,11 @@ public:
     bool ConnectToServer();
 
     void Run();
-
+    void User_Register(const std::string &tel, const std::string &name, const std::string &passwd);
 private:
     void Show_Menu();
     void User_Register();
+
     void User_Login();
     void  User_Check_PreBook();
     void User_Predet();
